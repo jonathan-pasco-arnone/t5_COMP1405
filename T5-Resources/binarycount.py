@@ -126,7 +126,8 @@ print("Hash time: ", (end-start))
 # list inputted (Commonly represented as N). Furthermore, changing the amount of times the program
 # runs with the "desired_numbers" input will not have a significant affect on the complexity
 # because the binary count is unaffected by the quantity of desired numbers and the linear count
-# can be affected both positively and negatively in an equal capacity.
+# can be affected both positively and negatively in an equal capacity. Moreover, the only time
+# that the linear count will outperform the binary count is if the list of numbers is very small.
 
 # Linear count complexity = O(N)
 # Binary count compexity = O(log N)
