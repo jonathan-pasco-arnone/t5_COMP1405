@@ -130,4 +130,4 @@ print("Hash time: ", (end-start))
 # that the linear count will outperform the binary count is if the list of numbers is very small.
 
 # Linear count complexity = O(N)
-# Binary count compexity = O(log N)
+# Binary count complexity = O(log N)
