@@ -1,77 +1,48 @@
+""" The improved queue program """
+
+# Created by: Jonathan Pasco-Arnone and Aidan Lalonde-Novales
+# Created on: October 2023
 
 def addend(list, dict, value):
+    """ Adds a new value onto the end of the list and dictionary """
     list.append(value)
-    dict[value] = len(list) - 1 # The key is the value
-    
-def removestart(list,dict):
+
+    # Creates a list for each key because each value could be put in multiple times
+    # For example if the value 23 was at place 5 and 12 in the queue then the key 23
+    # Would lead to the list [5,12]
+    if dict.get(value) is None:
+        dict[value] = [len(list) - 1] # The key is the value
+    else:
+        dict[value].append(len(list) - 1)
+
+def removestart(list, dict):
+    """ Pops the first value off of the list and dictionary """
     if len(list) == 0:
         return None
 
-    # Changes the keys in the dictionary to match the new order
-    # overwriting the first person in queue effectively deleting them
-    # Aka every key - 1
-    print("\n\n\nstart")
-    print(dict)
-    print(list)
-    quantity_keys = len(dict.keys()) - 1
-    if quantity_keys == 0:
-        del dict[0]
-    else:
-        for key in range(quantity_keys):
-            dict[key] = dict[key + 1]
-        print(dict)
-        print(quantity_keys)
-        del dict[quantity_keys]
+    # Move each value up one in the list
+    for key in dict.keys():
+        # For each value, there can be multiple locations in the queue
+        # so we have to cycle through each one
+        for duplicate_index in range(len(dict[key])):
+            dict[key][duplicate_index] -= 1
+
+    # Remove the first value of the list from the dictionary
+    # Inside of the dictionary list of values, the 0th one will always be the first in line
+    # Because of the previous for loop, the 0th value is now a -1
+    dict[list[0]].remove(-1)
+    # If the removed value makes the key empty, then remove the key
+    if dict[list[0]] == []:
+        del dict[list[0]]
 
     return list.pop(0)
-    
+
 def containslinear(list, value):
+    """ Checks if the list contains a value """
     return value in list
-    
+
 def containshash(dict, value):
+    """ Checks if a dictionary contains a value """
     if dict.get(value) is None:
         return False
     return True
-
-
-
-
-
-
-import random
-import time
-list = []
-hash = {}
-addprob = 100
-removeprob = 90
-repeat = 50000
-maxval = 500
-searchlist = []
-#randomly build the data by probabilistically adding/removing items to the list
-#also generate a list of items to search for later
-#also make sure that the dictionary search is returning the same result as the list search
-for i in range(repeat):
-    if random.randint(0,100) < addprob:
-        addend(list, hash, random.randint(0,maxval))
-    if random.randint(0,100) < removeprob:
-        removestart(list, hash)
-        
-    searchlist.append(random.randint(0,maxval))
-    
-    searchnum = random.randint(0,maxval)
-    
-    if containslinear(list, searchnum) != containshash(hash, searchnum):
-        print("Error: dictionary and list search returned different results")
-        exit()
-
-start = time.time()
-for i in searchlist:
-    containslinear(list, i)
-end = time.time()
-print("Linear time: ", (end-start))
-
-start = time.time()
-for i in searchlist:
-    containshash(hash, i)
-end = time.time()
-print("Hash time: ", (end-start))
